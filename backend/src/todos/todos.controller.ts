@@ -18,7 +18,7 @@ export class TodosController {
 
   @Post()
   async create(@Body() todo: Todo) {
-    return this.todosService.create(todo);
+    return await this.todosService.create(todo);
   }
 
   @Delete(':id')

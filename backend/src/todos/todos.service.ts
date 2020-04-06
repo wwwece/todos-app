@@ -17,8 +17,8 @@ export class TodosService {
     return this.todoRepository.findOne(id);
   }
 
-  async create(todo: Todo): Promise<void> {
-    await this.todoRepository.save(todo);
+  async create(todo: Todo): Promise<Todo> {
+    return await this.todoRepository.save(todo);
   }
 
   async remove(id: number): Promise<void> {

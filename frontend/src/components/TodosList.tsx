@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-interface Todo {
-  id: number;
-  title: string;
-  desc: string;
-  priority: 1 | 2 | 3;
-  date: Date;
-  isDone: boolean;
-}
+import { Todo } from "../types/todo.type";
 
 const TodosList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -24,7 +16,9 @@ const TodosList: React.FC = () => {
 
   return (
     <div>
-      {todos &&
+      {todos.length === 0 ? (
+        <div>Loading...</div>
+      ) : (
         todos.map((todo: Todo) => (
           <article key={todo.id}>
             <h1>{todo.title}</h1>
@@ -35,7 +29,8 @@ const TodosList: React.FC = () => {
             </div>
             <p>{todo.desc}</p>
           </article>
-        ))}
+        ))
+      )}
     </div>
   );
 };
