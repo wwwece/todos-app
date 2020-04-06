@@ -1,5 +1,5 @@
 export type Todo = {
-  id?: number;
+  id: number;
   title: string;
   desc: string;
   priority?: 1 | 2 | 3;

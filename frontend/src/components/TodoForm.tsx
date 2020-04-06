@@ -1,8 +1,11 @@
 import React from "react";
 import { Todo } from "../types/todo.type";
+import { TodoService } from "../services/todoService";
 
 const TodoForm: React.FC = () => {
+  const todoService = new TodoService();
   const INITIAL_VALUES: Todo = {
+    id: 0,
     title: "",
     desc: "",
     date: new Date(),
@@ -24,18 +27,10 @@ const TodoForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const response = await fetch("http://localhost:4000/todos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(todoData),
-    });
-    const newTodo = await response.json();
-
+    const newTodo = await todoService.create(todoData);
+    setTodoData(INITIAL_VALUES);
     // TODO: Use some notification service to notify user
     console.log(newTodo);
-
-    setTodoData(INITIAL_VALUES);
   };
 
   return (
