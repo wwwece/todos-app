@@ -1,9 +1,9 @@
 import React from "react";
 import { Todo } from "../types/todo.type";
-import { TodoService } from "../services/todoService";
+import { TodoAPI } from "../services/todoAPI";
 
 const TodoForm: React.FC = () => {
-  const todoService = new TodoService();
+  const todoAPI = new TodoAPI();
   const INITIAL_VALUES: Todo = {
     id: 0,
     title: "",
@@ -27,7 +27,7 @@ const TodoForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newTodo = await todoService.create(todoData);
+    const newTodo = await todoAPI.create(todoData);
     setTodoData(INITIAL_VALUES);
     // TODO: Use some notification service to notify user
     console.log(newTodo);

@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Todo } from "../types/todo.type";
-import { TodoService } from "../services/todoService";
+import { TodoAPI } from "../services/todoAPI";
 
 const TodosList: React.FC = () => {
-  const todoService = new TodoService();
+  const todoAPI = new TodoAPI();
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const getTodos = async () => {
-    setTodos(await todoService.findAll());
+    setTodos(await todoAPI.getAll());
   };
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const TodosList: React.FC = () => {
   }, []);
 
   const handleDelete = async (id: number) => {
-    const isDeleted = await todoService.remove(id);
+    const isDeleted = await todoAPI.delete(id);
     if (isDeleted) getTodos();
   };
 
