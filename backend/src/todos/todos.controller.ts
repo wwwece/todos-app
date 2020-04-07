@@ -7,13 +7,13 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  findAll() {
-    return this.todosService.findAll();
+  getAll() {
+    return this.todosService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.todosService.findOne(id);
+  getOne(@Param('id') id: number) {
+    return this.todosService.getOne(id);
   }
 
   @Post()
@@ -22,7 +22,7 @@ export class TodosController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<boolean> {
-    return (await (await this.todosService.remove(id)).affected) > 0;
+  async delete(@Param('id') id: number): Promise<boolean> {
+    return (await (await this.todosService.delete(id)).affected) > 0;
   }
 }

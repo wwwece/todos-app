@@ -14,6 +14,16 @@ export class TodoAPI {
     return [];
   };
 
+  public getOne = async (id: number) => {
+    try {
+      const res = await axios.get(`${this.BASE_URL}/${id}`);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+    return null;
+  };
+
   public create = async (data: Todo): Promise<Todo | null> => {
     try {
       const res = await axios.post(this.BASE_URL, data);
