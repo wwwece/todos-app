@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Todo } from "../types/todo.type";
+import { TodoProps as Todo } from "../types/todo.type";
 
 export class TodoAPI {
   private BASE_URL = "http://localhost:4000/todos";

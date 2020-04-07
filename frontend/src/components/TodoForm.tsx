@@ -1,10 +1,10 @@
 import React from "react";
-import { Todo } from "../types/todo.type";
+import { TodoProps } from "../types/todo.type";
 import { TodoAPI } from "../services/todoAPI";
 
 const TodoForm: React.FC = () => {
   const todoAPI = new TodoAPI();
-  const INITIAL_VALUES: Todo = {
+  const INITIAL_VALUES: TodoProps = {
     id: 0,
     title: "",
     desc: "",
@@ -13,7 +13,7 @@ const TodoForm: React.FC = () => {
     priority: 3,
   };
 
-  const [todoData, setTodoData] = React.useState<Todo>(INITIAL_VALUES);
+  const [todoData, setTodoData] = React.useState<TodoProps>(INITIAL_VALUES);
 
   // TODO: Make this to be a custom hook:
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
