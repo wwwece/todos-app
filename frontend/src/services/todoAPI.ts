@@ -14,7 +14,7 @@ export class TodoAPI {
     return [];
   };
 
-  public getOne = async (id: number) => {
+  public getOne = async (id: number): Promise<Todo | null> => {
     try {
       const res = await axios.get(`${this.BASE_URL}/${id}`);
       return res.data;
