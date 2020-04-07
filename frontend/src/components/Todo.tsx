@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 import { TodoAPI } from "../services/todoAPI";
 import { TodoProps } from "../types/todo.type";
 
@@ -39,9 +40,9 @@ const Todo: React.FC<Props> = ({ updateList }) => {
       <h1>{todo.title}</h1>
       <button onClick={() => handleDelete(todo.id)}>Delete</button>
       <div>
-        <span>{todo.date}</span>
+        <span>{moment(todo.date).format("dddd, MMMM Do YYYY")}</span>
         <span>{todo.priority}</span>
-        <span>{todo.isDone ? "Done" : "Waiting"}</span>
+        <span>{todo.isDone ? "Done" : "Todo"}</span>
       </div>
       <p>{todo.desc}</p>
     </article>
