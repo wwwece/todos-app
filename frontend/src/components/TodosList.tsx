@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
+import moment from "moment";
 
 const TodosList: React.FC = () => {
   const todoAPI = new TodoAPI();
@@ -61,7 +62,7 @@ const TodosList: React.FC = () => {
                       primary={
                         <Link to={`${match.url}/${todo.id}`}>{todo.title}</Link>
                       }
-                      secondary={todo.date}
+                      secondary={moment(todo.date).format("DD.MM.YYYY")}
                     />
 
                     <ListItemSecondaryAction>

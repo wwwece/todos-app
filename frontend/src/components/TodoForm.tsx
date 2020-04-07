@@ -1,6 +1,15 @@
 import React from "react";
 import { TodoProps } from "../types/todo.type";
 import { TodoAPI } from "../services/todoAPI";
+import {
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  Button,
+  Grid,
+} from "@material-ui/core";
+import moment from "moment";
 
 const TodoForm: React.FC = () => {
   const todoAPI = new TodoAPI();
@@ -33,68 +42,93 @@ const TodoForm: React.FC = () => {
     console.log(newTodo);
   };
 
+  const handleReset = () => {
+    setTodoData(INITIAL_VALUES);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Todo Form</h1>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography variant="h3" gutterBottom>
+            Add new Todo
+          </Typography>
+        </Grid>
 
-      <label>
-        Title:{" "}
-        <input
-          type="text"
-          value={todoData.title}
-          name="title"
-          onChange={handleInputChange}
-        />
-      </label>
+        <Grid item xs={8}>
+          <TextField
+            name="title"
+            label="Title"
+            value={todoData.title}
+            onChange={handleInputChange}
+            fullWidth
+          />
+        </Grid>
 
-      <label>
-        Description:{" "}
-        <input
-          type="textarea"
-          value={todoData.desc}
-          name="desc"
-          onChange={handleInputChange}
-        />
-      </label>
+        <Grid item xs={1}>
+          <TextField
+            name="priority"
+            label="Priority"
+            type="number"
+            value={todoData.priority}
+            onChange={handleInputChange}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{ min: "1", max: "3" }}
+          />
+        </Grid>
 
-      <label>
-        Date:{" "}
-        <input
-          type="text"
-          value={todoData.date
-            .toLocaleString()
-            .split(" ")[0]
-            .split(".")
-            .reverse()
-            .join("-")}
-          name="date"
-          onChange={handleInputChange}
-        />
-      </label>
+        <Grid item xs={3}>
+          <TextField
+            name="date"
+            label="Due date"
+            type="date"
+            value={moment(todoData.date).format("YYYY-MM-DD")}
+            onChange={handleInputChange}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Grid>
 
-      <label>
-        Is done?{" "}
-        <input
-          type="checkbox"
-          checked={todoData.isDone}
-          name="isDone"
-          onChange={handleInputChange}
-        />
-      </label>
+        <Grid item xs={12}>
+          <TextField
+            name="desc"
+            label="Description"
+            value={todoData.desc}
+            onChange={handleInputChange}
+            multiline
+            fullWidth
+            rowsMax="3"
+          />
+        </Grid>
 
-      <label>
-        Priority:{" "}
-        <input
-          type="number"
-          value={todoData.priority}
-          name="priority"
-          min="1"
-          max="3"
-          onChange={handleInputChange}
-        />
-      </label>
+        <Grid item xs={8}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={todoData.isDone}
+                onChange={handleInputChange}
+                name="isDone"
+                color="primary"
+              />
+            }
+            label="Done"
+          />
+        </Grid>
 
-      <input type="submit" value="Submit" />
+        <Grid item xs={4}>
+          <Button type="button" variant="contained" onClick={handleReset}>
+            Reset
+          </Button>
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };
