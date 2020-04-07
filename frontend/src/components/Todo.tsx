@@ -4,12 +4,15 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import { TodoAPI } from "../services/todoAPI";
 import { TodoProps } from "../types/todo.type";
+import { Paper, Typography, Chip, IconButton } from "@material-ui/core";
+import DoneIcon from "@material-ui/icons/Done";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 type Props = {
-  updateList: () => Promise<void>;
+  handleDelete: (id: number) => Promise<void>;
 };
 
-const Todo: React.FC<Props> = ({ updateList }) => {
+const Todo: React.FC<Props> = ({ handleDelete }) => {
   const { id } = useParams();
   const todoAPI = new TodoAPI();
   const [todo, setTodo] = React.useState<TodoProps | null>(null);
@@ -25,27 +28,35 @@ const Todo: React.FC<Props> = ({ updateList }) => {
     };
   }, [id]);
 
-  const handleDelete = async (id: number) => {
-    const isDeleted = await todoAPI.delete(id);
-    if (isDeleted) {
-      setTodo(null);
-      updateList();
-    }
-  };
-
   if (!id || !todo) return <div>Not found!</div>;
 
   return (
-    <article>
-      <h1>{todo.title}</h1>
-      <button onClick={() => handleDelete(todo.id)}>Delete</button>
+    <Paper elevation={3}>
+      <Typography variant="h3" gutterBottom>
+        {todo.title}
+      </Typography>
       <div>
-        <span>{moment(todo.date).format("dddd, MMMM Do YYYY")}</span>
-        <span>{todo.priority}</span>
-        <span>{todo.isDone ? "Done" : "Todo"}</span>
+        <Chip
+          size="small"
+          label={moment(todo.date).format("dddd, MMMM Do YYYY")}
+        />
+        <Chip size="small" label={todo.priority} />
+        <IconButton aria-label="done" size="small">
+          <DoneIcon color={todo.isDone ? "primary" : "inherit"} />
+        </IconButton>
+        <IconButton
+          aria-label="delete"
+          size="small"
+          onClick={() => {
+            handleDelete(todo.id);
+            setTodo(null);
+          }}
+        >
+          <DeleteIcon color={"error"} />
+        </IconButton>
       </div>
-      <p>{todo.desc}</p>
-    </article>
+      <Typography variant="body1">{todo.desc}</Typography>
+    </Paper>
   );
 };
 
