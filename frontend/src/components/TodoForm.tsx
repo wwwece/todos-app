@@ -1,15 +1,8 @@
 import React from "react";
 import { TodoProps } from "../types/todo.type";
 import { TodoAPI } from "../services/todoAPI";
-import {
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Typography,
-  Button,
-  Grid,
-} from "@material-ui/core";
-import moment from "moment";
+import { Typography, Button } from "@material-ui/core";
+import TodoFormGrid from "./TodoFormGrid";
 
 const TodoForm: React.FC = () => {
   const todoAPI = new TodoAPI();
@@ -48,87 +41,16 @@ const TodoForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h3" gutterBottom>
-            Add new Todo
-          </Typography>
-        </Grid>
-
-        <Grid item xs={8}>
-          <TextField
-            name="title"
-            label="Title"
-            value={todoData.title}
-            onChange={handleInputChange}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={1}>
-          <TextField
-            name="priority"
-            label="Priority"
-            type="number"
-            value={todoData.priority}
-            onChange={handleInputChange}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{ min: "1", max: "3" }}
-          />
-        </Grid>
-
-        <Grid item xs={3}>
-          <TextField
-            name="date"
-            label="Due date"
-            type="date"
-            value={moment(todoData.date).format("YYYY-MM-DD")}
-            onChange={handleInputChange}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            name="desc"
-            label="Description"
-            value={todoData.desc}
-            onChange={handleInputChange}
-            multiline
-            fullWidth
-            rowsMax="3"
-          />
-        </Grid>
-
-        <Grid item xs={8}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={todoData.isDone}
-                onChange={handleInputChange}
-                name="isDone"
-                color="primary"
-              />
-            }
-            label="Done"
-          />
-        </Grid>
-
-        <Grid item xs={4}>
-          <Button type="button" variant="contained" onClick={handleReset}>
-            Reset
-          </Button>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </Grid>
-      </Grid>
+      <Typography variant="h3" gutterBottom>
+        Add new Todo
+      </Typography>
+      <TodoFormGrid todoData={todoData} onInputChange={handleInputChange} />
+      <Button type="button" variant="contained" onClick={handleReset}>
+        Reset
+      </Button>
+      <Button type="submit" variant="contained" color="primary">
+        Submit
+      </Button>
     </form>
   );
 };

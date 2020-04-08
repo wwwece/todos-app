@@ -28,18 +28,14 @@ export class TodoAPI {
     return null;
   };
 
-  public update = async (id: number, data: any): Promise<Todo | null> => {
+  public update = async (id: number, data: any): Promise<boolean> => {
     const response = await this.api.put(`/${id}`, data);
-    if (response.ok) return response.data as Todo;
-    console.log(response.problem);
-    return null;
+    return response.ok;
   };
 
-  public patch = async (id: number, data: any): Promise<Todo | null> => {
+  public patch = async (id: number, data: any): Promise<boolean> => {
     const response = await this.api.patch(`/${id}`, data);
-    if (response.ok) return response.data as Todo;
-    console.log(response.problem);
-    return null;
+    return response.ok;
   };
 
   public delete = async (id: number): Promise<boolean> => {

@@ -13,6 +13,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Grid,
+  CircularProgress,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
@@ -49,7 +50,7 @@ const TodosList: React.FC = () => {
   return (
     <div>
       {todos.length === 0 ? (
-        <div>Loading...</div>
+        <CircularProgress />
       ) : (
         <div>
           <Grid container spacing={4}>
