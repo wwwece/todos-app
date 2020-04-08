@@ -11,7 +11,7 @@ type Props = {
 const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
   return (
     <Grid container spacing={4}>
-      <Grid item xs={8}>
+      <Grid item xs={6}>
         <TextField
           name="title"
           label="Title"
@@ -21,7 +21,7 @@ const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
         />
       </Grid>
 
-      <Grid item xs={1}>
+      <Grid item xs={2}>
         <TextField
           name="priority"
           label="Priority"
@@ -36,7 +36,7 @@ const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
         />
       </Grid>
 
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         <TextField
           name="date"
           label="Due date"
