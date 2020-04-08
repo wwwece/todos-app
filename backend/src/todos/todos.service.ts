@@ -10,7 +10,12 @@ export class TodosService {
   ) {}
 
   getAll(): Promise<Todo[]> {
-    return this.todoRepository.find();
+    return this.todoRepository.find({
+      order: {
+        date: 'ASC',
+        title: 'ASC',
+      },
+    });
   }
 
   getOne(id: number): Promise<Todo> {
