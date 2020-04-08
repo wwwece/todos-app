@@ -1,7 +1,7 @@
 {
-  "type": "postgres/mysql/etc",
+  "type": "postgres/mysql/mariadb/sqlite/mongodb/etc",
   "host": "localhost",
-  "port": 5432,
+  "port": "Postgres=5432 / MariaDB=3306",
   "username": "user",
   "password": "pw",
   "database": "db",
