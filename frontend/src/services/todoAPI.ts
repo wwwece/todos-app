@@ -34,6 +34,16 @@ export class TodoAPI {
     return null;
   };
 
+  public patch = async (id: number, data: any) => {
+    try {
+      const res = await axios.patch(`${this.BASE_URL}/${id}`, data);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+    return null;
+  };
+
   public delete = async (id: number): Promise<boolean> => {
     try {
       const res = await axios.delete(`${this.BASE_URL}/${id}`);

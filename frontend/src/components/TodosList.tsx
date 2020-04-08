@@ -41,6 +41,11 @@ const TodosList: React.FC = () => {
     }
   };
 
+  const handleIsDone = async (id: number, isDone: boolean) => {
+    const success = await todoAPI.patch(id, { isDone: isDone });
+    if (success) getTodos();
+  };
+
   return (
     <div>
       {todos.length === 0 ? (
@@ -82,7 +87,7 @@ const TodosList: React.FC = () => {
             <Grid item xs={8}>
               <Switch>
                 <Route path={`${match.url}/:id`}>
-                  <Todo handleDelete={handleDelete} />
+                  <Todo onDelete={handleDelete} onIsDone={handleIsDone} />
                 </Route>
                 {/* <Route path={`${match.url}`}>
                   <div>Select a todo to see its details.</div>

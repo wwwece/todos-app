@@ -9,20 +9,22 @@ import DoneIcon from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 type Props = {
-  handleDelete: (id: number) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
+  onIsDone: (id: number, data: any) => Promise<void>;
 };
 
-const Todo: React.FC<Props> = ({ handleDelete }) => {
+const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
   const { id } = useParams();
   const todoAPI = new TodoAPI();
   const [todo, setTodo] = React.useState<TodoProps | null>(null);
 
-  const getTodo = async () => {
-    if (id) setTodo(await todoAPI.getOne(parseInt(id)));
+  const getTodo = async (id: number | string | undefined) => {
+    const parsedId = parseInt(id as string);
+    if (parsedId) setTodo(await todoAPI.getOne(parsedId));
   };
 
   useEffect(() => {
-    getTodo();
+    getTodo(id);
     return () => {
       setTodo(null);
     };
@@ -41,14 +43,21 @@ const Todo: React.FC<Props> = ({ handleDelete }) => {
           label={moment(todo.date).format("dddd, MMMM Do YYYY")}
         />
         <Chip size="small" label={todo.priority} />
-        <IconButton aria-label="done" size="small">
+        <IconButton
+          aria-label="done"
+          size="small"
+          onClick={() => {
+            onIsDone(todo.id, !todo.isDone);
+            setTodo({ ...todo, isDone: !todo.isDone });
+          }}
+        >
           <DoneIcon color={todo.isDone ? "primary" : "inherit"} />
         </IconButton>
         <IconButton
           aria-label="delete"
           size="small"
           onClick={() => {
-            handleDelete(todo.id);
+            onDelete(todo.id);
             setTodo(null);
           }}
         >
