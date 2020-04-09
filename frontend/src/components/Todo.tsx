@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import DoneIcon from "@material-ui/icons/Done";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { Paper, Typography, Chip, IconButton } from "@material-ui/core";
+import { Typography, Chip, IconButton } from "@material-ui/core";
 import { TodoProps } from "../types/todo.type";
 import { TodoAPI } from "../services/todoAPI";
 import TodoFormGrid from "./TodoFormGrid";
@@ -65,7 +65,7 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
 
   return (
     <div>
-      <Paper elevation={3}>
+      <div>
         <Typography variant="h3" gutterBottom>
           {todo.title}
         </Typography>
@@ -106,7 +106,7 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
           </IconButton>
         </div>
         <Typography variant="body1">{todo.desc}</Typography>
-      </Paper>
+      </div>
 
       <Dialog
         title="Update Todo"

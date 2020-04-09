@@ -19,7 +19,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 import moment from "moment";
 
-const TodosList: React.FC = () => {
+const Todos: React.FC = () => {
   const todoAPI = new TodoAPI();
   const [todos, setTodos] = useState<TodoProps[]>([]);
   const match = useRouteMatch();
@@ -102,4 +102,4 @@ const TodosList: React.FC = () => {
   );
 };
 
-export default TodosList;
+export default Todos;

@@ -31,7 +31,7 @@ const Dialog: React.FC<Props> = ({
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} color="default">
           Cancel
         </Button>
         <Button onClick={onAction} color="primary">
