@@ -35,7 +35,7 @@ const Dialog: React.FC<Props> = ({
           Cancel
         </Button>
         <Button onClick={onAction} color="primary">
-          Done
+          Submit
         </Button>
       </DialogActions>
     </MuiDialog>

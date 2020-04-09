@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import DoneIcon from "@material-ui/icons/Done";
@@ -12,15 +12,17 @@ import TodoFormGrid from "./TodoFormGrid";
 import Dialog from "./Dialog";
 
 type Props = {
-  onDelete: (id: number) => Promise<void>;
-  onIsDone: (id: number, data: any) => Promise<void>;
+  todos: TodoProps[];
+  onDelete: (id: number) => Promise<boolean>;
+  onUpdate: (id: number, data: TodoProps) => Promise<boolean>;
+  onIsDone: (id: number, data: any) => Promise<boolean>;
 };
 
-const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
+const Todo: React.FC<Props> = ({ todos, onDelete, onUpdate, onIsDone }) => {
   const { id } = useParams();
-  const [todo, setTodo] = React.useState<TodoProps | null>(null);
-  const [updatedTodo, setUpdatedTodo] = React.useState<TodoProps | null>(todo);
-  const [updateOpen, setUpdateOpen] = React.useState<boolean>(false);
+  const [todo, setTodo] = useState<TodoProps | null>(null);
+  const [todoToUpdate, setTodoToUpdate] = useState<TodoProps | null>(todo);
+  const [updateOpen, setUpdateOpen] = useState<boolean>(false);
   const todoAPI = new TodoAPI();
 
   const getTodo = async (id: number | string | undefined) => {
@@ -28,7 +30,7 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
     if (parsedId) {
       const fetchedTodo = await todoAPI.getOne(parsedId);
       setTodo(fetchedTodo);
-      setUpdatedTodo(fetchedTodo);
+      setTodoToUpdate(fetchedTodo);
     }
   };
 
@@ -37,29 +39,7 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
     return () => {
       setTodo(null);
     };
-  }, [id]);
-
-  const handleUpdateTodo = async () => {
-    if (todo && updatedTodo) {
-      const success = await todoAPI.update(todo.id, updatedTodo);
-      if (success) {
-        setUpdateOpen(false);
-        getTodo(id);
-      }
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (updatedTodo) {
-      setUpdatedTodo({
-        ...updatedTodo,
-        [e.currentTarget.name]:
-          e.currentTarget.type === "checkbox"
-            ? e.currentTarget.checked
-            : e.currentTarget.value,
-      });
-    }
-  };
+  }, [id, todos]);
 
   if (!id || !todo) return <div>Not found!</div>;
 
@@ -78,9 +58,9 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
           <IconButton
             aria-label="done"
             size="small"
-            onClick={() => {
-              onIsDone(todo.id, !todo.isDone);
-              setTodo({ ...todo, isDone: !todo.isDone });
+            onClick={async () => {
+              const success = await onIsDone(todo.id, !todo.isDone);
+              if (success) getTodo(id);
             }}
           >
             <DoneIcon color={todo.isDone ? "primary" : "inherit"} />
@@ -88,9 +68,9 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
           <IconButton
             aria-label="delete"
             size="small"
-            onClick={() => {
-              onDelete(todo.id);
-              setTodo(null);
+            onClick={async () => {
+              const success = await onDelete(todo.id);
+              if (success) setTodo(null);
             }}
           >
             <DeleteIcon color={"error"} />
@@ -98,9 +78,7 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
           <IconButton
             aria-label="edit"
             size="small"
-            onClick={() => {
-              setUpdateOpen(true);
-            }}
+            onClick={() => setUpdateOpen(true)}
           >
             <EditIcon />
           </IconButton>
@@ -108,19 +86,22 @@ const Todo: React.FC<Props> = ({ onDelete, onIsDone }) => {
         <Typography variant="body1">{todo.desc}</Typography>
       </div>
 
-      <Dialog
-        title="Update Todo"
-        open={updateOpen}
-        onClose={() => setUpdateOpen(false)}
-        onAction={handleUpdateTodo}
-      >
-        {updatedTodo && (
-          <TodoFormGrid
-            todoData={updatedTodo}
-            onInputChange={handleInputChange}
-          />
-        )}
-      </Dialog>
+      {todoToUpdate && (
+        <Dialog
+          title="Update Todo"
+          open={updateOpen}
+          onClose={() => setUpdateOpen(false)}
+          onAction={async () => {
+            const success = await onUpdate(todo.id, todoToUpdate);
+            if (success) {
+              setUpdateOpen(false);
+              getTodo(id);
+            }
+          }}
+        >
+          <TodoFormGrid todoData={todoToUpdate} setTodoData={setTodoToUpdate} />
+        </Dialog>
+      )}
     </div>
   );
 };

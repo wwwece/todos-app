@@ -12,9 +12,6 @@ const Header: React.FC = () => {
         <Button component={RouterLink} to="/todos">
           Todos
         </Button>
-        <Button component={RouterLink} to="/create">
-          Add new
-        </Button>
       </Toolbar>
     </AppBar>
   );

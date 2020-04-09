@@ -5,10 +5,25 @@ import { TodoProps } from "../types/todo.type";
 
 type Props = {
   todoData: TodoProps;
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setTodoData:
+    | React.Dispatch<React.SetStateAction<TodoProps | null>>
+    | React.Dispatch<React.SetStateAction<TodoProps>>;
+  // onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
+const TodoFormGrid: React.FC<Props> = ({ todoData, setTodoData }) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (todoData) {
+      setTodoData({
+        ...todoData,
+        [e.currentTarget.name]:
+          e.currentTarget.type === "checkbox"
+            ? e.currentTarget.checked
+            : e.currentTarget.value,
+      });
+    }
+  };
+
   return (
     <Grid container spacing={4}>
       <Grid item xs={6}>
@@ -16,7 +31,7 @@ const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
           name="title"
           label="Title"
           value={todoData.title}
-          onChange={onInputChange}
+          onChange={handleInputChange}
           fullWidth
         />
       </Grid>
@@ -27,7 +42,7 @@ const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
           label="Priority"
           type="number"
           value={todoData.priority}
-          onChange={onInputChange}
+          onChange={handleInputChange}
           fullWidth
           InputLabelProps={{
             shrink: true,
@@ -42,7 +57,7 @@ const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
           label="Due date"
           type="date"
           value={moment(todoData.date).format("YYYY-MM-DD")}
-          onChange={onInputChange}
+          onChange={handleInputChange}
           fullWidth
           InputLabelProps={{
             shrink: true,
@@ -55,7 +70,7 @@ const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
           name="desc"
           label="Description"
           value={todoData.desc}
-          onChange={onInputChange}
+          onChange={handleInputChange}
           multiline
           fullWidth
           rowsMax="3"
@@ -67,7 +82,7 @@ const TodoFormGrid: React.FC<Props> = ({ todoData, onInputChange }) => {
           control={
             <Checkbox
               checked={todoData.isDone}
-              onChange={onInputChange}
+              onChange={handleInputChange}
               name="isDone"
               color="primary"
             />
