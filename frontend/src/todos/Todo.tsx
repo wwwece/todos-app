@@ -6,7 +6,7 @@ import DoneIcon from "@material-ui/icons/Done";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Typography, Chip, IconButton } from "@material-ui/core";
-import { TodoProps } from "./types";
+import { TodoProps } from "../types/todos";
 import { getOne } from "../services/todoAPI";
 import TodoFormGrid from "./TodoFormGrid";
 import Dialog from "../components/Dialog";

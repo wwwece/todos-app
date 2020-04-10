@@ -1,26 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import { TodoProps } from "./types";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { getTodos } from "./actions";
+import { RootState } from "../types/redux";
+import { TodoProps } from "../types/todos";
 import TodoAPI from "../services/todoAPI";
 import Todo from "./Todo";
 import { Grid, CircularProgress, Typography } from "@material-ui/core";
 import TodosList from "./TodosList";
 import TodoCreate from "./TodoCreate";
 
-const Todos: React.FC = () => {
-  const [todos, setTodos] = useState<TodoProps[]>([]);
-  const match = useRouteMatch();
+type Props = {
+  todos: any;
+  getTodos: typeof getTodos;
+};
 
-  const getTodos = async () => {
-    setTodos(await TodoAPI.getAll());
-  };
+const Todos: React.FC<Props> = ({ todos, getTodos }) => {
+  const match = useRouteMatch();
 
   useEffect(() => {
     getTodos();
-    return () => {
-      setTodos([]);
-    };
+    // TODO:
+    // return () => {
+    //   resetTodos();
+    // };
   }, []);
 
   const handleCreateNew = async (data: TodoProps) => {
@@ -35,7 +40,7 @@ const Todos: React.FC = () => {
   const handleDelete = async (id: number) => {
     const isDeleted = await TodoAPI.remove(id);
     if (isDeleted) {
-      setTodos(todos.filter((todo) => todo.id !== id));
+      getTodos();
     }
     return isDeleted;
   };
@@ -95,4 +100,11 @@ const Todos: React.FC = () => {
   );
 };
 
-export default Todos;
+const mapStateToProps = (state: RootState) => ({
+  todos: state.todos.todos,
+});
+
+const mapDispatchToProps = (dispatch: any) =>
+  bindActionCreators({ getTodos }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todos);

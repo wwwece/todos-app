@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, withStyles, Theme } from "@material-ui/core";
 import TodoFormGrid from "./TodoFormGrid";
-import { TodoProps } from "./types";
+import { TodoProps } from "../types/todos";
 import Dialog from "../components/Dialog";
 
 const CreateNewButton = withStyles((theme: Theme) => ({

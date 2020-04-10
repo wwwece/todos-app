@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { TextField, Checkbox, FormControlLabel, Grid } from "@material-ui/core";
-import { TodoProps } from "./types";
+import { TodoProps } from "../types/todos";
 
 type Props = {
   todoData: TodoProps;

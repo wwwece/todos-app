@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, match } from "react-router-dom";
-import { TodoProps } from "./types";
+import { TodoProps } from "../types/todos";
 import {
   List,
   ListItem,
