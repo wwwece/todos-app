@@ -6,10 +6,10 @@ import DoneIcon from "@material-ui/icons/Done";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Typography, Chip, IconButton } from "@material-ui/core";
-import { TodoProps } from "../types/todo.type";
-import { TodoAPI } from "../services/todoAPI";
+import { TodoProps } from "./types";
+import { getOne } from "../services/todoAPI";
 import TodoFormGrid from "./TodoFormGrid";
-import Dialog from "./Dialog";
+import Dialog from "../components/Dialog";
 
 type Props = {
   todos: TodoProps[];
@@ -23,12 +23,11 @@ const Todo: React.FC<Props> = ({ todos, onDelete, onUpdate, onIsDone }) => {
   const [todo, setTodo] = useState<TodoProps | null>(null);
   const [todoToUpdate, setTodoToUpdate] = useState<TodoProps | null>(todo);
   const [updateOpen, setUpdateOpen] = useState<boolean>(false);
-  const todoAPI = new TodoAPI();
 
   const getTodo = async (id: number | string | undefined) => {
     const parsedId = parseInt(id as string);
     if (parsedId) {
-      const fetchedTodo = await todoAPI.getOne(parsedId);
+      const fetchedTodo = await getOne(parsedId);
       setTodo(fetchedTodo);
       setTodoToUpdate(fetchedTodo);
     }

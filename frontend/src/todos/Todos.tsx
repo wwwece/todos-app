@@ -1,20 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import { TodoProps } from "../types/todo.type";
-import { TodoAPI } from "../services/todoAPI";
+import { TodoProps } from "./types";
+import TodoAPI from "../services/todoAPI";
 import Todo from "./Todo";
 import { Grid, CircularProgress, Typography } from "@material-ui/core";
 import TodosList from "./TodosList";
 import TodoCreate from "./TodoCreate";
 
 const Todos: React.FC = () => {
-  const todoAPI = new TodoAPI();
   const [todos, setTodos] = useState<TodoProps[]>([]);
   const match = useRouteMatch();
 
   const getTodos = async () => {
-    setTodos(await todoAPI.getAll());
+    setTodos(await TodoAPI.getAll());
   };
 
   useEffect(() => {
@@ -25,7 +24,7 @@ const Todos: React.FC = () => {
   }, []);
 
   const handleCreateNew = async (data: TodoProps) => {
-    const result = await todoAPI.create(data);
+    const result = await TodoAPI.create(data);
     if (result) {
       getTodos();
       return true;
@@ -34,7 +33,7 @@ const Todos: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    const isDeleted = await todoAPI.delete(id);
+    const isDeleted = await TodoAPI.remove(id);
     if (isDeleted) {
       setTodos(todos.filter((todo) => todo.id !== id));
     }
@@ -42,13 +41,13 @@ const Todos: React.FC = () => {
   };
 
   const handleUpdate = async (id: number, data: TodoProps) => {
-    const success = await todoAPI.update(id, data);
+    const success = await TodoAPI.update(id, data);
     if (success) getTodos();
     return success;
   };
 
   const handleIsDone = async (id: number, isDone: boolean) => {
-    const success = await todoAPI.patch(id, { isDone: isDone });
+    const success = await TodoAPI.patch(id, { isDone: isDone });
     if (success) getTodos();
     return success;
   };

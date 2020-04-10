@@ -1,56 +1,64 @@
 import axios from "axios";
-import { TodoProps as Todo } from "../types/todo.type";
+import { TodoProps as Todo } from "../todos/types";
 
-export class TodoAPI {
-  private BASE_URL = "http://localhost:4000/todos";
+const BASE_URL = "http://localhost:4000/todos";
 
-  public getAll = async (): Promise<Todo[]> => {
-    try {
-      const { data } = await axios.get(this.BASE_URL);
-      return data;
-    } catch (err) {
-      console.log(err);
-    }
-    return [];
-  };
+export const getAll = async (): Promise<Todo[]> => {
+  try {
+    const { data } = await axios.get(BASE_URL);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+  return [];
+};
 
-  public getOne = async (id: number): Promise<Todo | null> => {
-    try {
-      const res = await axios.get(`${this.BASE_URL}/${id}`);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-    return null;
-  };
+export const getOne = async (id: number): Promise<Todo | null> => {
+  try {
+    const res = await axios.get(`${BASE_URL}/${id}`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
 
-  public create = async (data: Todo): Promise<Todo | null> => {
-    try {
-      const res = await axios.post(this.BASE_URL, data);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-    return null;
-  };
+export const create = async (data: Todo): Promise<Todo | null> => {
+  try {
+    const res = await axios.post(BASE_URL, data);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
 
-  public patch = async (id: number, data: any) => {
-    try {
-      const res = await axios.patch(`${this.BASE_URL}/${id}`, data);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-    return null;
-  };
+// TODO: UPDATE IS MISSING!
 
-  public delete = async (id: number): Promise<boolean> => {
-    try {
-      const res = await axios.delete(`${this.BASE_URL}/${id}`);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-    return false;
-  };
-}
+export const patch = async (id: number, data: any) => {
+  try {
+    const res = await axios.patch(`${BASE_URL}/${id}`, data);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+};
+
+export const remove = async (id: number): Promise<boolean> => {
+  try {
+    const res = await axios.delete(`${BASE_URL}/${id}`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+};
+
+export default {
+  getAll,
+  getOne,
+  create,
+  patch,
+  remove,
+};
