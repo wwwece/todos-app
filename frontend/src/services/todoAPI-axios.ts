@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TodoProps as Todo } from "../types/todos";
+import { TodoProps as Todo, TodoPatchProps } from "../types/todos";
 
 const BASE_URL = "http://localhost:4000/todos";
 
@@ -35,7 +35,7 @@ export const create = async (data: Todo): Promise<Todo | null> => {
 
 // TODO: UPDATE IS MISSING!
 
-export const patch = async (id: number, data: any) => {
+export const patch = async (id: number, data: TodoPatchProps) => {
   try {
     const res = await axios.patch(`${BASE_URL}/${id}`, data);
     return res.data;

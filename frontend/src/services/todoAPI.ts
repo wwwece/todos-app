@@ -1,5 +1,5 @@
 import { create as createApi } from "apisauce";
-import { TodoProps as Todo } from "../types/todos";
+import { TodoProps as Todo, TodoPatchProps } from "../types/todos";
 
 const BASE_URL = "http://localhost:4000/todos";
 const api = createApi({
@@ -27,12 +27,15 @@ export const create = async (data: Todo): Promise<Todo | null> => {
   return null;
 };
 
-export const update = async (id: number, data: any): Promise<boolean> => {
+export const update = async (id: number, data: Todo): Promise<boolean> => {
   const response = await api.put(`/${id}`, data);
   return response.ok;
 };
 
-export const patch = async (id: number, data: any): Promise<boolean> => {
+export const patch = async (
+  id: number,
+  data: TodoPatchProps,
+): Promise<boolean> => {
   const response = await api.patch(`/${id}`, data);
   return response.ok;
 };

@@ -1,20 +1,21 @@
 import React from "react";
-import { applyMiddleware, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { Provider } from "react-redux";
-import logger from "redux-logger";
 import thunk from "redux-thunk";
+import logger from "redux-logger";
+import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
+import { applyMiddleware, createStore } from "redux";
 import { Router, Switch, Route } from "react-router-dom";
-import Todos from "./todos/Todos";
-import Header from "./components/Header";
+import { composeWithDevTools } from "redux-devtools-extension";
 import { Container, ThemeProvider, CssBaseline } from "@material-ui/core";
-import theme from "./theme/theme";
+
+import Header from "./components/Header";
 import rootReducer from "./rootReducer";
+import Todos from "./todos/Todos";
+import theme from "./theme/theme";
 
 const middleware = [logger, thunk];
 
-const store = createStore(
+export const store = createStore(
   rootReducer,
   {},
   composeWithDevTools(applyMiddleware(...middleware)),

@@ -1,60 +1,59 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { getTodos } from "./actions";
+import { bindActionCreators, Dispatch } from "redux";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Grid, CircularProgress, Typography } from "@material-ui/core";
+
 import { RootState } from "../types/redux";
 import { TodoProps } from "../types/todos";
-import TodoAPI from "../services/todoAPI";
-import Todo from "./Todo";
-import { Grid, CircularProgress, Typography } from "@material-ui/core";
-import TodosList from "./TodosList";
 import TodoCreate from "./TodoCreate";
+import TodosList from "./TodosList";
+import Actions from "./actions";
+import Todo from "./Todo";
 
 type Props = {
-  todos: any;
-  getTodos: typeof getTodos;
+  todos: TodoProps[];
+  getTodos: typeof Actions.getTodos;
+  newTodo: typeof Actions.newTodo;
+  updateTodo: typeof Actions.updateTodo;
+  patchTodo: typeof Actions.patchTodo;
+  deleteTodo: typeof Actions.deleteTodo;
+  resetTodos: typeof Actions.resetTodos;
 };
 
-const Todos: React.FC<Props> = ({ todos, getTodos }) => {
+const Todos: React.FC<Props> = ({
+  todos,
+  getTodos,
+  newTodo,
+  updateTodo,
+  patchTodo,
+  deleteTodo,
+  resetTodos,
+}) => {
   const match = useRouteMatch();
 
-  useEffect(() => {
+  React.useEffect(() => {
     getTodos();
-    // TODO:
-    // return () => {
-    //   resetTodos();
-    // };
+    return () => {
+      resetTodos();
+    };
   }, []);
 
   const handleCreateNew = async (data: TodoProps) => {
-    const result = await TodoAPI.create(data);
-    if (result) {
-      getTodos();
-      return true;
-    }
-    return false;
+    newTodo(data);
   };
 
   const handleDelete = async (id: number) => {
-    const isDeleted = await TodoAPI.remove(id);
-    if (isDeleted) {
-      getTodos();
-    }
-    return isDeleted;
+    deleteTodo(id);
   };
 
   const handleUpdate = async (id: number, data: TodoProps) => {
-    const success = await TodoAPI.update(id, data);
-    if (success) getTodos();
-    return success;
+    updateTodo(id, data);
   };
 
   const handleIsDone = async (id: number, isDone: boolean) => {
-    const success = await TodoAPI.patch(id, { isDone: isDone });
-    if (success) getTodos();
-    return success;
+    patchTodo(id, { isDone: isDone });
   };
 
   return (
@@ -82,7 +81,6 @@ const Todos: React.FC<Props> = ({ todos, getTodos }) => {
               <Switch>
                 <Route path={`${match.url}/:id`}>
                   <Todo
-                    todos={todos}
                     onDelete={handleDelete}
                     onUpdate={handleUpdate}
                     onIsDone={handleIsDone}
@@ -104,7 +102,7 @@ const mapStateToProps = (state: RootState) => ({
   todos: state.todos.todos,
 });
 
-const mapDispatchToProps = (dispatch: any) =>
-  bindActionCreators({ getTodos }, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators({ ...Actions }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todos);

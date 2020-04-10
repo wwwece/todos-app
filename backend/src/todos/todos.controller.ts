@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { Todo, TodoPatch } from './todo.entity';
+import { UpdateResult } from 'typeorm';
 
 @Controller('todos')
 export class TodosController {
@@ -40,7 +41,7 @@ export class TodosController {
     @Param('id') id: number,
     @Body() todoPatch: TodoPatch,
   ): Promise<boolean> {
-    return (await this.todosService.update(id, todoPatch)).affected > 0;
+    return (await this.todosService.update(id, todoPatch)).raw.changedRows > 0;
   }
 
   @Delete(':id')

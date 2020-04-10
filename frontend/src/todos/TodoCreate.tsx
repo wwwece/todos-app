@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Button, withStyles, Theme } from "@material-ui/core";
-import TodoFormGrid from "./TodoFormGrid";
+
 import { TodoProps } from "../types/todos";
+import TodoFormGrid from "./TodoFormGrid";
 import Dialog from "../components/Dialog";
 
 const CreateNewButton = withStyles((theme: Theme) => ({
@@ -12,7 +13,7 @@ const CreateNewButton = withStyles((theme: Theme) => ({
 }))(Button);
 
 type Props = {
-  onCreateNew: (data: TodoProps) => Promise<boolean>;
+  onCreateNew: (data: TodoProps) => Promise<void>;
 };
 
 const TodoCreate: React.FC<Props> = ({ onCreateNew }) => {
@@ -43,11 +44,9 @@ const TodoCreate: React.FC<Props> = ({ onCreateNew }) => {
           title="Create new Todo"
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          onAction={async () => {
-            const success = await onCreateNew(todo);
-            if (success) {
-              setDialogOpen(false);
-            }
+          onAction={() => {
+            onCreateNew(todo);
+            setDialogOpen(false);
           }}
         >
           <TodoFormGrid todoData={todo} setTodoData={setTodo} />

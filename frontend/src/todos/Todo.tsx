@@ -1,44 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
+import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import DoneIcon from "@material-ui/icons/Done";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { bindActionCreators, Dispatch } from "redux";
 import { Typography, Chip, IconButton } from "@material-ui/core";
+
+import { getTodo, resetTodo, setTodoUpdate } from "./actions";
+import { RootState } from "../types/redux";
 import { TodoProps } from "../types/todos";
-import { getOne } from "../services/todoAPI";
 import TodoFormGrid from "./TodoFormGrid";
 import Dialog from "../components/Dialog";
 
 type Props = {
-  todos: TodoProps[];
-  onDelete: (id: number) => Promise<boolean>;
-  onUpdate: (id: number, data: TodoProps) => Promise<boolean>;
-  onIsDone: (id: number, data: any) => Promise<boolean>;
+  todo: TodoProps | null;
+  todoToUpdate: TodoProps | null;
+  setTodoUpdate: typeof setTodoUpdate;
+  getTodo: typeof getTodo;
+  resetTodo: typeof resetTodo;
+  onDelete: (id: number) => Promise<void>;
+  onUpdate: (id: number, data: TodoProps) => Promise<void>;
+  onIsDone: (id: number, data: boolean) => Promise<void>;
 };
 
-const Todo: React.FC<Props> = ({ todos, onDelete, onUpdate, onIsDone }) => {
+const Todo: React.FC<Props> = ({
+  todo,
+  todoToUpdate,
+  setTodoUpdate,
+  getTodo,
+  resetTodo,
+  onDelete,
+  onUpdate,
+  onIsDone,
+}) => {
   const { id } = useParams();
-  const [todo, setTodo] = useState<TodoProps | null>(null);
-  const [todoToUpdate, setTodoToUpdate] = useState<TodoProps | null>(todo);
-  const [updateOpen, setUpdateOpen] = useState<boolean>(false);
-
-  const getTodo = async (id: number | string | undefined) => {
-    const parsedId = parseInt(id as string);
-    if (parsedId) {
-      const fetchedTodo = await getOne(parsedId);
-      setTodo(fetchedTodo);
-      setTodoToUpdate(fetchedTodo);
-    }
-  };
+  const [updateOpen, setUpdateOpen] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    getTodo(id);
+    getTodo(parseInt(id as string));
     return () => {
-      setTodo(null);
+      resetTodo();
     };
-  }, [id, todos]);
+  }, [id]);
 
   if (!id || !todo) return <div>Not found!</div>;
 
@@ -57,20 +63,14 @@ const Todo: React.FC<Props> = ({ todos, onDelete, onUpdate, onIsDone }) => {
           <IconButton
             aria-label="done"
             size="small"
-            onClick={async () => {
-              const success = await onIsDone(todo.id, !todo.isDone);
-              if (success) getTodo(id);
-            }}
+            onClick={() => onIsDone(todo.id, !todo.isDone)}
           >
             <DoneIcon color={todo.isDone ? "primary" : "inherit"} />
           </IconButton>
           <IconButton
             aria-label="delete"
             size="small"
-            onClick={async () => {
-              const success = await onDelete(todo.id);
-              if (success) setTodo(null);
-            }}
+            onClick={() => onDelete(todo.id)}
           >
             <DeleteIcon color={"error"} />
           </IconButton>
@@ -90,19 +90,24 @@ const Todo: React.FC<Props> = ({ todos, onDelete, onUpdate, onIsDone }) => {
           title="Update Todo"
           open={updateOpen}
           onClose={() => setUpdateOpen(false)}
-          onAction={async () => {
-            const success = await onUpdate(todo.id, todoToUpdate);
-            if (success) {
-              setUpdateOpen(false);
-              getTodo(id);
-            }
+          onAction={() => {
+            onUpdate(todo.id, todoToUpdate);
+            setUpdateOpen(false);
           }}
         >
-          <TodoFormGrid todoData={todoToUpdate} setTodoData={setTodoToUpdate} />
+          <TodoFormGrid todoData={todoToUpdate} setTodoData={setTodoUpdate} />
         </Dialog>
       )}
     </div>
   );
 };
 
-export default Todo;
+const mapStateToProps = (state: RootState) => ({
+  todo: state.todos.todo,
+  todoToUpdate: state.todos.todoUpdate,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators({ getTodo, resetTodo, setTodoUpdate }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todo);
