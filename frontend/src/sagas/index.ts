@@ -1,32 +1,40 @@
 import { takeEvery, call, put } from "redux-saga/effects";
+import { ActionProps } from "../types/redux";
+import { store } from "../App";
 
-import Actions, {
-  TODO,
-  // NEW_TODO,
-  // UPDATE_TODO,
-  // PATCH_TODO,
-  // DELETE_TODO,
-  // SET_TODO_UPDATE,
-  // RESET_TODOS,
-  // RESET_TODO,
-} from "../todos/actions";
+import Actions, { TODO } from "../todos/actions";
 import TodoAPI from "../services/todoAPI";
 
-// worker saga:
+// worker sagas:
 function* fetchTodos() {
   const todos = yield call(TodoAPI.getAll);
   yield put(Actions.setTodos(todos));
 }
 
-function* fetchTodo(action: any) {
+function* fetchTodo(action: ActionProps) {
   const todo = yield call(TodoAPI.getOne, action.payload.id);
   yield put(Actions.setTodo(todo));
+}
+
+function* createTodo(action: ActionProps) {
+  const todo = yield call(TodoAPI.create, action.payload.todo);
+  yield put(Actions.getTodos());
+  yield put(Actions.setTodo(todo));
+}
+
+function* removeTodo(action: ActionProps) {
+  const { id } = action.payload;
+  yield call(TodoAPI.remove, id);
+  yield put(Actions.getTodos());
+  if (store.getState().todos.todo.id === id) yield put(Actions.resetTodo());
 }
 
 // watcher saga:
 function* rootSaga() {
   yield takeEvery(TODO.API_REQUEST_ONE, fetchTodo);
   yield takeEvery(TODO.API_REQUEST_ALL, fetchTodos);
+  yield takeEvery(TODO.API_REQUEST_CREATE, createTodo);
+  yield takeEvery(TODO.API_REQUEST_DELETE, removeTodo);
 }
 
 export default rootSaga;

@@ -1,9 +1,7 @@
 import {
   TODO,
-  NEW_TODO,
   UPDATE_TODO,
   PATCH_TODO,
-  DELETE_TODO,
   SET_TODO_UPDATE,
   RESET_TODOS,
   RESET_TODO,
@@ -38,12 +36,15 @@ export default function (state = initialState, action: ActionProps) {
         todo: payload.todo,
         todoUpdate: payload.todo,
       };
-
-    case NEW_TODO:
+    case TODO.API_REQUEST_CREATE:
       return {
         ...state,
-        todos: payload.todos,
       };
+    case TODO.API_REQUEST_DELETE:
+      return {
+        ...state,
+      };
+
     case UPDATE_TODO:
       return {
         ...state,
@@ -56,12 +57,6 @@ export default function (state = initialState, action: ActionProps) {
         todos: payload.todos,
         todo: payload.todo,
         todoUpdate: payload.todo,
-      };
-    case DELETE_TODO:
-      return {
-        ...state,
-        todo: payload.todo,
-        todos: payload.todos,
       };
     case SET_TODO_UPDATE:
       return {

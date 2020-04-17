@@ -8,13 +8,13 @@ export const TODOS = {};
 export const TODO = {
   API_REQUEST_ALL: "TODO_API_REQUEST_ALL",
   API_SUCCESS_ALL: "TODO_API_SUCCESS_ALL",
-  API_FAILURE_ALL: "TODO_API_FAILURE_ALL",
+  // API_FAILURE_ALL: "TODO_API_FAILURE_ALL",
   API_REQUEST_ONE: "TODO_API_REQUEST_ONE",
   API_SUCCESS_ONE: "TODO_API_SUCCESS_ONE",
-  API_FAILURE_ONE: "TODO_API_FAILURE_ONE",
+  // API_FAILURE_ONE: "TODO_API_FAILURE_ONE",
   API_REQUEST_CREATE: "TODO_API_REQUEST_CREATE",
-  API_SUCCESS_CREATE: "TODO_API_SUCCESS_CREATE",
-  API_FAILURE_CREATE: "TODO_API_FAILURE_CREATE",
+  // API_SUCCESS_CREATE: "TODO_API_SUCCESS_CREATE",
+  // API_FAILURE_CREATE: "TODO_API_FAILURE_CREATE",
   API_REQUEST_UPDATE: "TODO_API_REQUEST_UPDATE",
   API_SUCCESS_UPDATE: "TODO_API_SUCCESS_UPDATE",
   API_FAILURE_UPDATE: "TODO_API_FAILURE_UPDATE",
@@ -53,14 +53,15 @@ export const setTodo = (todo: TodoProps) => ({
   payload: { todo },
 });
 
-export const newTodo = (data: TodoProps): AppThunk => async (dispatch) => {
-  await TodoAPI.create(data);
-  const todos = await TodoAPI.getAll();
-  return dispatch({
-    type: NEW_TODO,
-    payload: { todos },
-  });
-};
+export const newTodo = (todo: TodoProps) => ({
+  type: TODO.API_REQUEST_CREATE,
+  payload: { todo },
+});
+
+export const deleteTodo = (id: number) => ({
+  type: TODO.API_REQUEST_DELETE,
+  payload: { id },
+});
 
 export const updateTodo = (id: number, data: TodoProps): AppThunk => async (
   dispatch,
@@ -87,17 +88,6 @@ export const patchTodo = (id: number, data: TodoPatchProps): AppThunk => async (
   return dispatch({
     type: PATCH_TODO,
     payload: { todos, todo },
-  });
-};
-
-export const deleteTodo = (id: number): AppThunk => async (dispatch) => {
-  const success = await TodoAPI.remove(id);
-  const todos = await TodoAPI.getAll();
-  const todo =
-    store.getState().todos.todo.id === id ? null : store.getState().todos.todo;
-  return dispatch({
-    type: DELETE_TODO,
-    payload: { todo, todos },
   });
 };
 
