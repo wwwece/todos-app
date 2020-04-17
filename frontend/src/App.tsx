@@ -7,19 +7,24 @@ import { applyMiddleware, createStore } from "redux";
 import { Router, Switch, Route } from "react-router-dom";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Container, ThemeProvider, CssBaseline } from "@material-ui/core";
+import createSagaMiddleware from "redux-saga";
 
 import Header from "./components/Header";
 import rootReducer from "./rootReducer";
+import rootSaga from "./sagas";
 import Todos from "./todos/Todos";
 import theme from "./theme/theme";
 
-const middleware = [logger, thunk];
+const sagaMiddleware = createSagaMiddleware();
+const middleware = [logger, thunk, sagaMiddleware];
 
 export const store = createStore(
   rootReducer,
   {},
   composeWithDevTools(applyMiddleware(...middleware)),
 );
+
+sagaMiddleware.run(rootSaga);
 
 const browserHistory = createBrowserHistory();
 

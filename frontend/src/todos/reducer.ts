@@ -1,6 +1,5 @@
 import {
-  GET_TODOS,
-  GET_TODO,
+  TODO,
   NEW_TODO,
   UPDATE_TODO,
   PATCH_TODO,
@@ -20,17 +19,26 @@ const initialState: TodosState = {
 export default function (state = initialState, action: ActionProps) {
   const { type, payload } = action;
   switch (type) {
-    case GET_TODOS:
+    case TODO.API_REQUEST_ALL:
+      return {
+        ...state,
+      };
+    case TODO.API_SUCCESS_ALL:
       return {
         ...state,
         todos: payload.todos,
       };
-    case GET_TODO:
+    case TODO.API_REQUEST_ONE:
+      return {
+        ...state,
+      };
+    case TODO.API_SUCCESS_ONE:
       return {
         ...state,
         todo: payload.todo,
         todoUpdate: payload.todo,
       };
+
     case NEW_TODO:
       return {
         ...state,
