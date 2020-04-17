@@ -1,5 +1,4 @@
 import React from "react";
-import thunk from "redux-thunk";
 import logger from "redux-logger";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
@@ -16,7 +15,8 @@ import Todos from "./todos/Todos";
 import theme from "./theme/theme";
 
 const sagaMiddleware = createSagaMiddleware();
-const middleware = [logger, thunk, sagaMiddleware];
+
+const middleware = [logger, sagaMiddleware];
 
 export const store = createStore(
   rootReducer,

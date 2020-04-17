@@ -1,4 +1,4 @@
-import { TODO, SET_TODO_UPDATE, RESET_TODOS, RESET_TODO } from "./actions";
+import { TODO } from "./actions";
 import { TodosState, ActionProps } from "../types/redux";
 
 const initialState: TodosState = {
@@ -46,17 +46,17 @@ export default function (state = initialState, action: ActionProps) {
         ...state,
       };
 
-    case SET_TODO_UPDATE:
+    case TODO.SET_UPDATEABLE_TODO:
       return {
         ...state,
         todoUpdate: payload.todo,
       };
-    case RESET_TODOS:
+    case TODO.RESET_ALL:
       return {
         ...state,
         todos: [],
       };
-    case RESET_TODO:
+    case TODO.RESET_VISIBLE:
       return {
         ...state,
         todo: null,

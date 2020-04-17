@@ -26,21 +26,21 @@ function* removeTodo(action: ActionProps) {
   const { id } = action.payload;
   yield call(TodoAPI.remove, id);
   yield put(Actions.getTodos());
-  if (store.getState().todos.todo.id === id) yield put(Actions.resetTodo());
+  if (store.getState().todos?.todo?.id === id) yield put(Actions.resetTodo());
 }
 
 function* updateTodo(action: ActionProps) {
   const { id, todo } = action.payload;
   yield call(TodoAPI.update, id, todo);
   yield put(Actions.getTodos());
-  if (store.getState().todos.todo.id === id) yield put(Actions.getTodo(id));
+  if (store.getState().todos?.todo?.id === id) yield put(Actions.getTodo(id));
 }
 
 function* patchTodo(action: ActionProps) {
   const { id, todo } = action.payload;
   yield call(TodoAPI.patch, id, todo);
   yield put(Actions.getTodos());
-  if (store.getState().todos.todo.id === id) yield put(Actions.getTodo(id));
+  if (store.getState().todos?.todo?.id === id) yield put(Actions.getTodo(id));
 }
 
 // watcher saga:

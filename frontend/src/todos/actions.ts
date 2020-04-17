@@ -2,6 +2,7 @@ import { TodoProps, TodoPatchProps } from "../types/todos";
 
 export const TODOS = {};
 
+// TODO: Should do something in cases of success or failure?
 export const TODO = {
   API_REQUEST_ALL: "TODO_API_REQUEST_ALL",
   API_SUCCESS_ALL: "TODO_API_SUCCESS_ALL",
@@ -21,11 +22,10 @@ export const TODO = {
   API_REQUEST_DELETE: "TODO_API_REQUEST_DELETE",
   // API_SUCCESS_DELETE: "TODO_API_SUCCESS_DELETE",
   // API_FAILURE_DELETE: "TODO_API_FAILURE_DELETE",
+  SET_UPDATEABLE_TODO: "SET_UPDATEABLE_TODO",
+  RESET_VISIBLE: "RESET_VISIBLE_TODO",
+  RESET_ALL: "RESET_ALL_TODOS",
 };
-
-export const SET_TODO_UPDATE = "SET_TODO_UPDATE";
-export const RESET_TODO = "RESET_TODO";
-export const RESET_TODOS = "RESET_TODOS";
 
 export const getTodos = () => ({
   type: TODO.API_REQUEST_ALL,
@@ -67,16 +67,16 @@ export const patchTodo = (id: number, todo: TodoPatchProps) => ({
 });
 
 export const setTodoUpdate = (todo: TodoProps) => ({
-  type: SET_TODO_UPDATE,
+  type: TODO.SET_UPDATEABLE_TODO,
   payload: { todo },
 });
 
 export const resetTodos = () => ({
-  type: RESET_TODOS,
+  type: TODO.RESET_ALL,
 });
 
 export const resetTodo = () => ({
-  type: RESET_TODO,
+  type: TODO.RESET_VISIBLE,
 });
 
 export default {
