@@ -20,15 +20,15 @@ export const getOne = async (id: number): Promise<Todo | null> => {
   return null;
 };
 
-export const create = async (data: Todo): Promise<Todo | null> => {
-  const response = await api.post("", data);
+export const create = async (todo: Todo): Promise<Todo | null> => {
+  const response = await api.post("", todo);
   if (response.ok) return response.data as Todo;
   console.log(response.problem);
   return null;
 };
 
-export const update = async (id: number, data: Todo): Promise<boolean> => {
-  const response = await api.put(`/${id}`, data);
+export const update = async (id: number, todo: Todo): Promise<boolean> => {
+  const response = await api.put(`/${id}`, todo);
   return response.ok;
 };
 

@@ -1,7 +1,4 @@
 import { TodoProps, TodoPatchProps } from "../types/todos";
-import TodoAPI from "../services/todoAPI";
-import { AppThunk } from "../types/redux";
-import { store } from "../App";
 
 export const TODOS = {};
 
@@ -16,20 +13,16 @@ export const TODO = {
   // API_SUCCESS_CREATE: "TODO_API_SUCCESS_CREATE",
   // API_FAILURE_CREATE: "TODO_API_FAILURE_CREATE",
   API_REQUEST_UPDATE: "TODO_API_REQUEST_UPDATE",
-  API_SUCCESS_UPDATE: "TODO_API_SUCCESS_UPDATE",
-  API_FAILURE_UPDATE: "TODO_API_FAILURE_UPDATE",
+  // API_SUCCESS_UPDATE: "TODO_API_SUCCESS_UPDATE",
+  // API_FAILURE_UPDATE: "TODO_API_FAILURE_UPDATE",
   API_REQUEST_PATCH: "TODO_API_REQUEST_PATCH",
-  API_SUCCESS_PATCH: "TODO_API_SUCCESS_PATCH",
-  API_FAILURE_PATCH: "TODO_API_FAILURE_PATCH",
+  // API_SUCCESS_PATCH: "TODO_API_SUCCESS_PATCH",
+  // API_FAILURE_PATCH: "TODO_API_FAILURE_PATCH",
   API_REQUEST_DELETE: "TODO_API_REQUEST_DELETE",
-  API_SUCCESS_DELETE: "TODO_API_SUCCESS_DELETE",
-  API_FAILURE_DELETE: "TODO_API_FAILURE_DELETE",
+  // API_SUCCESS_DELETE: "TODO_API_SUCCESS_DELETE",
+  // API_FAILURE_DELETE: "TODO_API_FAILURE_DELETE",
 };
 
-export const NEW_TODO = "NEW_TODO";
-export const UPDATE_TODO = "UPDATE_TODO";
-export const PATCH_TODO = "PATCH_TODO";
-export const DELETE_TODO = "DELETE_TODO";
 export const SET_TODO_UPDATE = "SET_TODO_UPDATE";
 export const RESET_TODO = "RESET_TODO";
 export const RESET_TODOS = "RESET_TODOS";
@@ -63,33 +56,15 @@ export const deleteTodo = (id: number) => ({
   payload: { id },
 });
 
-export const updateTodo = (id: number, data: TodoProps): AppThunk => async (
-  dispatch,
-) => {
-  const success = await TodoAPI.update(id, data);
-  const todos = await TodoAPI.getAll();
-  const todo =
-    store.getState().todos.todo.id === id ? data : store.getState().todos.todo;
-  return dispatch({
-    type: UPDATE_TODO,
-    payload: { todo, todos },
-  });
-};
+export const updateTodo = (id: number, todo: TodoProps) => ({
+  type: TODO.API_REQUEST_UPDATE,
+  payload: { id, todo },
+});
 
-export const patchTodo = (id: number, data: TodoPatchProps): AppThunk => async (
-  dispatch,
-) => {
-  const success = await TodoAPI.patch(id, data);
-  const todos = await TodoAPI.getAll();
-  const todo =
-    store.getState().todos.todo.id === id
-      ? await TodoAPI.getOne(id)
-      : store.getState().todos.todo;
-  return dispatch({
-    type: PATCH_TODO,
-    payload: { todos, todo },
-  });
-};
+export const patchTodo = (id: number, todo: TodoPatchProps) => ({
+  type: TODO.API_REQUEST_PATCH,
+  payload: { id, todo },
+});
 
 export const setTodoUpdate = (todo: TodoProps) => ({
   type: SET_TODO_UPDATE,

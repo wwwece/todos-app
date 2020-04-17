@@ -29,12 +29,28 @@ function* removeTodo(action: ActionProps) {
   if (store.getState().todos.todo.id === id) yield put(Actions.resetTodo());
 }
 
+function* updateTodo(action: ActionProps) {
+  const { id, todo } = action.payload;
+  yield call(TodoAPI.update, id, todo);
+  yield put(Actions.getTodos());
+  if (store.getState().todos.todo.id === id) yield put(Actions.getTodo(id));
+}
+
+function* patchTodo(action: ActionProps) {
+  const { id, todo } = action.payload;
+  yield call(TodoAPI.patch, id, todo);
+  yield put(Actions.getTodos());
+  if (store.getState().todos.todo.id === id) yield put(Actions.getTodo(id));
+}
+
 // watcher saga:
 function* rootSaga() {
   yield takeEvery(TODO.API_REQUEST_ONE, fetchTodo);
   yield takeEvery(TODO.API_REQUEST_ALL, fetchTodos);
   yield takeEvery(TODO.API_REQUEST_CREATE, createTodo);
   yield takeEvery(TODO.API_REQUEST_DELETE, removeTodo);
+  yield takeEvery(TODO.API_REQUEST_UPDATE, updateTodo);
+  yield takeEvery(TODO.API_REQUEST_PATCH, patchTodo);
 }
 
 export default rootSaga;
